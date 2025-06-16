@@ -2,7 +2,7 @@
 
 public class Pet
 {
-    public long Id;
+    public long Id { get; set; }
     public string Name { get; set; }
     public int Age { get; set; }
     public PetType Type { get; set; }
