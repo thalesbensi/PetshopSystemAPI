@@ -8,5 +8,4 @@ public class Pet
     public PetType Type { get; set; }
     public string Race { get; set; }
     public long TutorId { get; set; }
-    public Tutor Tutor { get; set; }
 }
