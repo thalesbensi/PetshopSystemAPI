@@ -16,7 +16,7 @@ public class PetController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult CreatePet(Pet pet)
+    public IActionResult CreatePet([FromBody] Pet pet)
     {
         var createdPet = _petService.CreatePet(pet);
         return CreatedAtAction(nameof(GetPetById), new { id = createdPet.Id }, createdPet);
@@ -37,7 +37,7 @@ public class PetController : ControllerBase
         return Ok(pet);
     }
 
-    [HttpGet("{name:string}")]
+    [HttpGet("{name}")]
     public ActionResult<Pet> GetPetByName(string name)
     {
         var pet = _petService.GetPetByName(name);
