@@ -11,6 +11,4 @@ public class Tutor
     
     [EmailAddress]
     public string Email { get; set; }
-    
-    public List<Pet> Pets { get; set; } = new List<Pet>();
 }
