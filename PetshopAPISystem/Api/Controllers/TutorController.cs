@@ -16,47 +16,47 @@ public class TutorController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult CreateTutor([FromBody] Tutor tutor)
+    public async Task<IActionResult> CreateTutor([FromBody] Tutor tutor)
     {
-        var createdTutor = _tutorService.CreateTutor(tutor);
+        var createdTutor = await _tutorService.CreateTutorAsync(tutor);
         return CreatedAtAction(nameof(GetTutorById), new { id = createdTutor.Id }, createdTutor);
     }
 
     [HttpGet]
-    public ActionResult<List<Tutor>> GetAllTutors()
+    public async Task<ActionResult<List<Tutor>>> GetAllTutors()
     {
-        var tutors = _tutorService.GetTutors();
+        var tutors = await _tutorService.GetTutorsAsync();
         return Ok(tutors);
     }
 
     [HttpGet("{id:long}")]
-    public ActionResult<Tutor> GetTutorById(long id)
+    public async Task<ActionResult<Tutor>> GetTutorById(long id)
     {
-        var tutor = _tutorService.GetTutorById(id);
+        var tutor = await _tutorService.GetTutorByIdAsync(id);
         if (tutor == null) return NotFound();
         return Ok(tutor);
     }
 
-    [HttpGet("{name}")]
-    public ActionResult<Tutor> GetTutorByName(string name)
+    [HttpGet("byName/{name}")]
+    public async Task<ActionResult<Tutor>> GetTutorByName(string name)
     {
-        var tutor = _tutorService.GetTutorByName(name);
+        var tutor = await _tutorService.GetTutorByNameAsync(name);
         if (tutor == null) return NotFound();
         return Ok(tutor);
     }
 
     [HttpPut("{id:long}")]
-    public IActionResult UpdateTutor(long id, [FromBody] Tutor tutor)
+    public async Task<IActionResult> UpdateTutor(long id, [FromBody] Tutor tutor)
     {
-        var updatedTutor = _tutorService.UpdateTutor(id, tutor);
+        var updatedTutor = await _tutorService.UpdateTutorAsync(id, tutor);
         if (updatedTutor == null) return NotFound();
         return Ok(updatedTutor);
     }
 
     [HttpDelete("{id:long}")]
-    public IActionResult DeleteTutor(long id)
+    public async Task<IActionResult> DeleteTutor(long id)
     {
-        var success = _tutorService.DeleteTutor(id);
+        var success = await _tutorService.DeleteTutorAsync(id);
         if (!success) return NotFound();
         return NoContent();
     }
