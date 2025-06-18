@@ -25,6 +25,8 @@ public class TutorService
     public async Task<Tutor?> GetTutorByIdAsync(long id) => await _context.Tutors.FindAsync(id);
     
     public async Task<Tutor?> GetTutorByNameAsync(string name) => await _context.Tutors.FirstOrDefaultAsync(p => p.Name == name);
+        
+    public async Task<Tutor?> GetTutorByEmailAsync(string email) => await _context.Tutors.FirstOrDefaultAsync(p => p.Email == email);
     
     public async Task<Tutor?> UpdateTutorAsync(long id, Tutor tutor)
     {
