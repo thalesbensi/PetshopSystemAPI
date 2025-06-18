@@ -15,13 +15,6 @@ public class TutorController : ControllerBase
         _tutorService = tutorService;
     }
 
-    [HttpPost]
-    public async Task<IActionResult> CreateTutor([FromBody] Tutor tutor)
-    {
-        var createdTutor = await _tutorService.CreateTutorAsync(tutor);
-        return CreatedAtAction(nameof(GetTutorById), new { id = createdTutor.Id }, createdTutor);
-    }
-
     [HttpGet]
     public async Task<ActionResult<List<Tutor>>> GetAllTutors()
     {
