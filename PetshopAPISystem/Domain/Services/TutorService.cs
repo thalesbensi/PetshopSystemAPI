@@ -1,52 +1,55 @@
-﻿using PetshopAPISystem.Domain.Contexts;
+﻿using Microsoft.EntityFrameworkCore;
+using PetshopAPISystem.Domain.Contexts;
 using PetshopAPISystem.Domain.Models;
 
 namespace PetshopAPISystem.Domain.Services;
 
 public class TutorService
 {
-    private AppDbContext _context;
+    private readonly AppDbContext _context;
 
     public TutorService(AppDbContext context)
     {
         _context = context;
     }
 
-    public Tutor CreateTutor(Tutor tutor)
+    public async Task<Tutor> CreateTutorAsync(Tutor tutor)
     {
-        _context.Tutors.Add(tutor);
-        _context.SaveChanges();
+        await _context.Tutors.AddAsync(tutor);
+        await _context.SaveChangesAsync();
         return tutor;
     }
 
-    public List<Tutor> GetTutors() => _context.Tutors.ToList();
+    public async Task<List<Tutor>> GetTutorsAsync() => await _context.Tutors.ToListAsync();
     
-    public Tutor? GetTutorById(long id) => _context.Tutors.Find(id);
+    public async Task<Tutor?> GetTutorByIdAsync(long id) => await _context.Tutors.FindAsync(id);
     
-    public Tutor? GetTutorByName(string name) => _context.Tutors.FirstOrDefault(p => p.Name == name);
 
-    public Tutor? UpdateTutor(long id, Tutor tutor)
+    public async Task<Tutor?> GetTutorByNameAsync(string name) => await _context.Tutors.FirstOrDefaultAsync(p => p.Name == name);
+    
+    public async Task<Tutor?> UpdateTutorAsync(long id, Tutor tutor)
     {
-        var tutorToUpdate = _context.Tutors.Find(id);
+        var tutorToUpdate = await _context.Tutors.FindAsync(id);
         if (tutorToUpdate == null) return null;
-        
+
         tutorToUpdate.Name = tutor.Name;
         tutorToUpdate.Email = tutor.Email;
+        tutorToUpdate.Password = tutor.Password;
 
-        _context.Update(tutorToUpdate);
-        _context.SaveChanges();
-        
+        _context.Tutors.Update(tutorToUpdate);
+        await _context.SaveChangesAsync();
+
         return tutorToUpdate;
     }
 
-    public bool DeleteTutor(long id)
+    public async Task<bool> DeleteTutorAsync(long id)
     {
-        var tutorToDelete = _context.Tutors.Find(id);
+        var tutorToDelete = await _context.Tutors.FindAsync(id);
         if (tutorToDelete == null) return false;
-        
+
         _context.Tutors.Remove(tutorToDelete);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
+
         return true;
     }
-    
 }
