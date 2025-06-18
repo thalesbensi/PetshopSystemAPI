@@ -1,4 +1,5 @@
-﻿using PetshopAPISystem.Domain.Contexts;
+﻿using Microsoft.EntityFrameworkCore;
+using PetshopAPISystem.Domain.Contexts;
 using PetshopAPISystem.Domain.Models;
 
 namespace PetshopAPISystem.Domain.Services
@@ -12,50 +13,44 @@ namespace PetshopAPISystem.Domain.Services
             _context = context;
         }
 
-        public Pet CreatePet(Pet pet)
+        public async Task<Pet> CreatePetAsync(Pet pet)
         {
-            _context.Pets.Add(pet);
-            _context.SaveChanges();
+            await _context.Pets.AddAsync(pet);
+            await _context.SaveChangesAsync();
             return pet;
         }
 
-        public List<Pet> GetAllPets()
-        {
-            return _context.Pets.ToList();
-        }
+        public async Task<List<Pet>> GetAllPetsAsync() => await _context.Pets.ToListAsync();
+        
 
-        public Pet? GetPetById(long id)
+        public async Task<Pet?> GetPetByIdAsync(long id) => await _context.Pets.FindAsync(id);
+        
+        public async Task<Pet?> GetPetByNameAsync(string name) => await _context.Pets.FirstOrDefaultAsync(p => p.Name == name);
+        
+        public async Task<Pet?> UpdatePetAsync(long id, Pet pet)
         {
-            return _context.Pets.Find(id);
-        }
-
-        public Pet? GetPetByName(string name)
-        {
-            return _context.Pets.FirstOrDefault(p => p.Name == name);
-        }
-
-        public Pet? UpdatePet(long id, Pet pet)
-        {
-            var petToUpdate = _context.Pets.Find(id);
+            var petToUpdate = await _context.Pets.FindAsync(id);
             if (petToUpdate == null) return null;
 
             petToUpdate.Name = pet.Name;
             petToUpdate.Age = pet.Age;
             petToUpdate.Type = pet.Type;
+            petToUpdate.Race = pet.Race;
 
             _context.Pets.Update(petToUpdate);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return petToUpdate;
         }
 
-        public bool DeletePet(long id)
+        public async Task<bool> DeletePetAsync(long id)
         {
-            var pet = _context.Pets.Find(id);
+            var pet = await _context.Pets.FindAsync(id);
             if (pet == null) return false;
 
             _context.Pets.Remove(pet);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
+
             return true;
         }
     }

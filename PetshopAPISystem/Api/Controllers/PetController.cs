@@ -16,47 +16,47 @@ public class PetController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult CreatePet([FromBody] Pet pet)
+    public async Task<IActionResult> CreatePet([FromBody] Pet pet)
     {
-        var createdPet = _petService.CreatePet(pet);
+        var createdPet = await _petService.CreatePetAsync(pet);
         return CreatedAtAction(nameof(GetPetById), new { id = createdPet.Id }, createdPet);
     }
 
     [HttpGet]
-    public ActionResult<List<Pet>> GetAllPets()
+    public async Task<ActionResult<List<Pet>>> GetAllPets()
     {
-        var pets = _petService.GetAllPets();
+        var pets = await _petService.GetAllPetsAsync();
         return Ok(pets);
     }
 
     [HttpGet("{id:long}")]
-    public ActionResult<Pet> GetPetById(long id)
+    public async Task<ActionResult<Pet>> GetPetById(long id)
     {
-        var pet = _petService.GetPetById(id);
+        var pet = await _petService.GetPetByIdAsync(id);
         if (pet == null) return NotFound();
         return Ok(pet);
     }
 
-    [HttpGet("{name}")]
-    public ActionResult<Pet> GetPetByName(string name)
+    [HttpGet("byName/{name}")]
+    public async Task<ActionResult<Pet>> GetPetByName(string name)
     {
-        var pet = _petService.GetPetByName(name);
+        var pet = await _petService.GetPetByNameAsync(name);
         if (pet == null) return NotFound();
         return Ok(pet);
     }
 
     [HttpPut("{id:long}")]
-    public IActionResult UpdatePet(long id, Pet pet)
+    public async Task<IActionResult> UpdatePet(long id, [FromBody] Pet pet)
     {
-        var updatedPet = _petService.UpdatePet(id, pet);
+        var updatedPet = await _petService.UpdatePetAsync(id, pet);
         if (updatedPet == null) return NotFound();
         return Ok(updatedPet);
     }
 
     [HttpDelete("{id:long}")]
-    public IActionResult DeletePet(long id)
+    public async Task<IActionResult> DeletePet(long id)
     {
-        var success = _petService.DeletePet(id);
+        var success = await _petService.DeletePetAsync(id);
         if (!success) return NotFound();
         return NoContent();
     }
