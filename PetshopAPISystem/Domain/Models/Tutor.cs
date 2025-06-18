@@ -20,5 +20,5 @@ public class Tutor
     
     [Required(ErrorMessage = "At least one role is required")]
     [MinLength(1, ErrorMessage = "At least one role is required")]
-    public List<Role> Roles { get; set; } = new();
+    public List<Role> Roles { get; set; }
 }
