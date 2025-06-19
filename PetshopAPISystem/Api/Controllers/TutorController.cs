@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PetshopAPISystem.Domain.Models;
 using PetshopAPISystem.Domain.Services;
 
@@ -15,6 +16,7 @@ public class TutorController : ControllerBase
         _tutorService = tutorService;
     }
 
+    [Authorize(Roles = "ADMIN")]
     [HttpGet]
     public async Task<ActionResult<List<Tutor>>> GetAllTutors()
     {
@@ -22,6 +24,7 @@ public class TutorController : ControllerBase
         return Ok(tutors);
     }
 
+    [Authorize(Roles = "ADMIN")]
     [HttpGet("{id:long}")]
     public async Task<ActionResult<Tutor>> GetTutorById(long id)
     {
@@ -30,6 +33,7 @@ public class TutorController : ControllerBase
         return Ok(tutor);
     }
 
+    [Authorize(Roles = "ADMIN")]
     [HttpGet("byName/{name}")]
     public async Task<ActionResult<Tutor>> GetTutorByName(string name)
     {
@@ -37,7 +41,8 @@ public class TutorController : ControllerBase
         if (tutor == null) return NotFound();
         return Ok(tutor);
     }
-
+    
+    [Authorize(Roles = "ADMIN")]
     [HttpPut("{id:long}")]
     public async Task<IActionResult> UpdateTutor(long id, [FromBody] Tutor tutor)
     {
@@ -46,6 +51,7 @@ public class TutorController : ControllerBase
         return Ok(updatedTutor);
     }
 
+    [Authorize(Roles = "ADMIN")]
     [HttpDelete("{id:long}")]
     public async Task<IActionResult> DeleteTutor(long id)
     {

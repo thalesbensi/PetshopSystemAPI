@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PetshopAPISystem.Domain.Models;
 using PetshopAPISystem.Domain.Services;
 
@@ -15,13 +16,15 @@ public class PetController : ControllerBase
         _petService = petService;
     }
 
+    [Authorize(Roles = "ADMIN")]
     [HttpPost]
     public async Task<IActionResult> CreatePet([FromBody] Pet pet)
     {
         var createdPet = await _petService.CreatePetAsync(pet);
         return CreatedAtAction(nameof(GetPetById), new { id = createdPet.Id }, createdPet);
     }
-
+    
+    [Authorize(Roles = "ADMIN,USER")]
     [HttpGet]
     public async Task<ActionResult<List<Pet>>> GetAllPets()
     {
@@ -29,6 +32,7 @@ public class PetController : ControllerBase
         return Ok(pets);
     }
 
+    [Authorize(Roles = "ADMIN,USER")]
     [HttpGet("{id:long}")]
     public async Task<ActionResult<Pet>> GetPetById(long id)
     {
@@ -36,7 +40,8 @@ public class PetController : ControllerBase
         if (pet == null) return NotFound();
         return Ok(pet);
     }
-
+    
+    [Authorize(Roles = "ADMIN,USER")]
     [HttpGet("byName/{name}")]
     public async Task<ActionResult<Pet>> GetPetByName(string name)
     {
@@ -45,6 +50,7 @@ public class PetController : ControllerBase
         return Ok(pet);
     }
 
+    [Authorize(Roles = "ADMIN")]
     [HttpPut("{id:long}")]
     public async Task<IActionResult> UpdatePet(long id, [FromBody] Pet pet)
     {
@@ -53,6 +59,7 @@ public class PetController : ControllerBase
         return Ok(updatedPet);
     }
 
+    [Authorize(Roles = "ADMIN")]
     [HttpDelete("{id:long}")]
     public async Task<IActionResult> DeletePet(long id)
     {
